@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>FeelingMatrics</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="./css/style.css" rel="stylesheet">
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    <script type="text/babel">
+      const Quadrant = (fieldId) => {
+        const [cards, setCards] = React.useState(null);
+        const add = () => 
+          setCards({
+            ...cards,
+            [Math.random().toString(36).slice(-8)]: {
+              t: "Wash",
+              x: Math.floor(Math.random() * (200 - 80) + 80),
+              y: Math.floor(Math.random() * (200 - 80) + 80),
+            },
+          });
+        const update = (key, card) => setCards({ ...cards, [key]: card });
+
+        const [dragging, setDragging] = React.useState({ key: "", x: 0, y: 0 });
+
+        const [editMode, setEditMode] = React.useState({ key: "" });
+
+        const AddButton = (id) => {
+          console.log(id);
+          if (fieldId.fieldId === "quadrant1") {
+            return ( <button className="addButton" onClick={() => add()}>哀しいと感じること</button> )
+          }
+          else if(fieldId.fieldId === "quadrant2") {
+            return ( <button className="addButton" onClick={() => add()}>怒りを感じること</button> )
+          }
+          else if(fieldId.fieldId === "quadrant3") {
+            return ( <button className="addButton" onClick={() => add()}>嬉しいと感じること</button> )
+          }
+          else {
+            return ( <button className="addButton" onClick={() => add()}>楽しいと感じること</button> )
+          }
+        };
+
+        if (!cards) return (
+          <li
+            id={ fieldId.fieldId }
+            className="col"
+          >
+            <div className="quadrantField">
+              { AddButton(fieldId.fieldId) }
+            </div>
+          </li>
+        )
+        return (
+          <li
+            id={ fieldId.fieldId }
+            className="col"
+          >
+            <div
+              className="quadrantField"
+              onDrop={(e) => {
+                if (!dragging || !cards) return;
+                update(dragging.key, { ...cards[dragging.key], x: e.clientX - dragging.x, y: e.clientY - dragging.y });
+              }}
+              onDragOver={(e) => e.preventDefault()}  // enable onDrop event
+            >
+              { AddButton(fieldId.fieldId) }
+              { Object.keys(cards).map((key) => (
+                <div
+                  key={key}
+                  style={{ position: "absolute", top: cards[key].y + "px", left: cards[key].x + "px" }}
+                  draggable={true}
+                  onDragStart={(e) => setDragging({ key, x: e.clientX - cards[key].x, y: e.clientY - cards[key].y })}
+                >
+                {editMode.key === key ? (
+                  <textarea
+                    onBlur={(e) => setEditMode({ key: "" })}
+                    onChange={(e) => update(key, { ...cards[key], t: e.target.value })}
+                    defaultValue={cards[key].t}
+                  />
+                ) : (
+                  <div onClick={(e) => setEditMode({ key })}>{cards[key].t}</div>
+                )}
+                </div>
+              ))}
+            </div>
+          </li>
+        );
+      };
+
+      const Board = () => {
+        return (
+          <ul className="row quadrantFieldList">
+            <Quadrant fieldId="quadrant1" />
+            <Quadrant fieldId="quadrant2" />
+            <Quadrant fieldId="quadrant3" />
+            <Quadrant fieldId="quadrant4" />
+          </ul>
+      )};
+
+      ReactDOM.render(<Board />, document.getElementById("root"));
+</script>
+  </head>
+  <body>
+    <div id="root" />
+  </body>
+</html>

@@ -1,0 +1,69 @@
+body {
+    margin: 0;
+}
+
+ul {
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+}
+
+.row {
+    display: grid;
+    height: 100vh;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 48% auto;
+    gap: 16px 16px;
+    margin: 0;
+}
+
+.col {
+    width: 100%;
+}
+
+ul.quadrantFieldList {
+    list-style: none;
+}
+
+ul.quadrantFieldList > li {
+    padding: 0;
+    line-height: 0;
+    background-repeat:  no-repeat;
+    background-position: 50% 50%;
+    background-color: #ffffff;
+}
+
+ul.quadrantFieldList > li:nth-child(1) {
+    background-image: url(../images/face_1.png);
+}
+
+ul.quadrantFieldList > li:nth-child(2) {
+    background-image: url(../images/face_2.png);
+}
+
+ul.quadrantFieldList > li:nth-child(3) {
+    background-image: url(../images/face_3.png);
+}
+
+ul.quadrantFieldList > li:nth-child(4) {
+    background-image: url(../images/face_4.png);
+}
+
+.quadrantField {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+ul.quadrantFieldList > li:nth-child(odd) > .quadrantField {
+    background: linear-gradient(to right, rgba(240, 253, 255, 0.9), rgba(245, 255, 240, 0.9));
+}
+
+ul.quadrantFieldList > li:nth-child(even) > .quadrantField {
+    background: linear-gradient(to right, rgba(245, 255, 240, 0.9), rgba(255, 240, 240, 0.9));
+}
+
+.addButton {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+}
